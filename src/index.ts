@@ -16,7 +16,7 @@ export = (app: Application) => {
     context.log(`Processing status update ${context.payload.installation.id}`)
     const issue_comment = (context.payload as any) as IssueComment
 
-    if(issue_comment.comment.user.login === 'sarangan12'){
+    if(issue_comment.comment.user.login === 'AutorestCI'){
     // We know the comment has been created by AutorestCI
       const sdk_generation_comment = sdk_generated_comment_regex.exec(issue_comment.comment.body)
       const sdk_not_generation_comment_1 = sdk_not_generated_comment_regex_1.exec(issue_comment.comment.body)
