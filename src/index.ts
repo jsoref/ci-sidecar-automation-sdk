@@ -25,6 +25,8 @@ export = (app: Application) => {
       const sdk_not_generation_comment_2 = sdk_not_generated_comment_regex_2.exec(issue_comment.comment.body)
       const sdk_not_generation_error_comment = sdk_not_generated_error_comment_regex.exec(issue_comment.comment.body)
       const github = new GitHub(context)
+      context.log(`Issue Comment Body ${issue_comment.comment.body}`)
+      context.log(`SDK Generation Comment ${sdk_generation_comment}`)
 
       if(sdk_generation_comment != null || sdk_not_generation_comment_1 != null || sdk_not_generation_comment_2 != null || sdk_not_generation_error_comment != null) {
       // The message is related to Automation for azure-sdk-for-* message. 
