@@ -15,6 +15,8 @@ export = (app: Application) => {
     // A comment has been created. 
     context.log(`Processing status update ${context.payload.installation.id}`)
     const issue_comment = (context.payload as any) as IssueComment
+    context.log(`Issue comment user ${issue_comment.comment.user.login}`)
+    context.log(`Comparison: ${issue_comment.comment.user.login === 'AutorestCI'}`)
 
     if(issue_comment.comment.user.login === 'AutorestCI'){
     // We know the comment has been created by AutorestCI
