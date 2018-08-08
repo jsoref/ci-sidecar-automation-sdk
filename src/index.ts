@@ -5,10 +5,10 @@ import { IssueComment } from 'github-webhook-event-types'
 import { Application } from 'probot'
 import { GitHub } from './github'
 
-const sdk_generated_comment_regex = new RegExp(/# Automation for azure-sdk-for-(.*)\\nA .* has been created for you.*/gm)
-const sdk_not_generated_comment_regex_1 = new RegExp(/# Automation for azure-sdk-for-(.*)\\nNothing to generate for azure-sdk-for-(.*)/gm)
-const sdk_not_generated_comment_regex_2 = new RegExp(/# Automation for azure-sdk-for-(.*)\\nUnable to detect any generation context from this PR./gm)
-const sdk_not_generated_error_comment_regex = new RegExp(/# Automation for azure-sdk-for-(.*)\\n<details><summary>Encountered a Subprocess error:.*/gm)
+const sdk_generated_comment_regex = new RegExp(/# Automation for azure-sdk-for-(.*)\nA .* has been created for you.*/gm)
+const sdk_not_generated_comment_regex_1 = new RegExp(/# Automation for azure-sdk-for-(.*)\nNothing to generate for azure-sdk-for-(.*)/gm)
+const sdk_not_generated_comment_regex_2 = new RegExp(/# Automation for azure-sdk-for-(.*)\nUnable to detect any generation context from this PR./gm)
+const sdk_not_generated_error_comment_regex = new RegExp(/# Automation for azure-sdk-for-(.*)\n<details><summary>Encountered a Subprocess error:.*/gm)
 
 export = (app: Application) => {
   app.on('issue_comment.edited', async context => {
