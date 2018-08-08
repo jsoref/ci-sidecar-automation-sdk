@@ -11,7 +11,7 @@ const sdk_not_generated_comment_regex_2 = new RegExp(/# Automation for azure-sdk
 const sdk_not_generated_error_comment_regex = new RegExp(/# Automation for azure-sdk-for-(.*)\\n<details><summary>Encountered a Subprocess error:.*/gm)
 
 export = (app: Application) => {
-  app.on('issue_comment.created', async context => {
+  app.on('issue_comment.edited', async context => {
     // A comment has been created. 
     context.log(`Processing status update ${context.payload.installation.id}`)
     const issue_comment = (context.payload as any) as IssueComment
