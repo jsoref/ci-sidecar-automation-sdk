@@ -1,0 +1,65 @@
+{
+  "name": "ci-sidecar-automation-sdk",
+  "version": "1.0.0",
+  "description": "",
+  "author": "Sarangan Rajamanickam <sarajama@microsoft.com> (https://github.com/sarangan12/ci-sidecar-automation-sdk)",
+  "license": "MIT",
+  "repository": "https://github.com/sarangan12/ci-sidecar-automation-sdk.git",
+  "homepage": "https://github.com/sarangan12/ci-sidecar-automation-sdk",
+  "bugs": "https://github.com/sarangan12/ci-sidecar-automation-sdk/issues",
+  "keywords": [
+    "probot",
+    "github",
+    "probot-app"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "nodemon --ext ts,js --exec \"npm start\"",
+    "start": "node server.js",
+    "lint": "tslint --project .",
+    "fmt": "prettier --write src/**/* && tslint --project . --fix",
+    "test": "tsc --noEmit -p . && jest --coverage && npm run lint",
+    "test:watch": "jest --watch --notify --notifyMode=change --coverage"
+  },
+  "dependencies": {
+    "@octokit/rest": "^15.6.0",
+    "@types/bunyan": "^1.8.4",
+    "@types/node": "^10.5.1",
+    "@types/request": "^2.47.1",
+    "@types/request-promise-native": "^1.0.15",
+    "github-webhook-event-types": "^1.1.0",
+    "jsonlint": "^1.6.3",
+    "probot": "^7.0.0",
+    "request": "^2.87.0",
+    "request-promise-native": "^1.0.5",
+    "ts-node": "^7.0.0",
+    "typescript": "^2.9.2"
+  },
+  "devDependencies": {
+    "jest": "^23.2.0",
+    "nodemon": "^1.17.2",
+    "prettier": "^1.13.7",
+    "smee-client": "^1.0.2",
+    "ts-jest": "^23.0.0",
+    "tslint": "^5.10.0",
+    "tslint-config-prettier": "^1.13.0",
+    "tslint-config-standard": "^7.1.0"
+  },
+  "engines": {
+    "node": ">= 8.3.0"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ],
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    }
+  }
+}
