@@ -18,7 +18,7 @@ export = (app: Application) => {
     context.log(`Issue comment user ${issue_comment.comment.user.login}`)
     context.log(`Comparison: ${issue_comment.comment.user.login === 'AutorestCI'}`)
 
-    if(issue_comment.comment.user.login === 'AutorestCI'){
+    if(issue_comment.comment.user.login === 'sarangan12'){
     // We know the comment has been created by AutorestCI
       const sdk_generation_comment = sdk_generated_comment_regex.exec(issue_comment.comment.body)
       const sdk_not_generation_comment_1 = sdk_not_generated_comment_regex_1.exec(issue_comment.comment.body)
