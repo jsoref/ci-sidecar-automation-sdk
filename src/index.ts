@@ -5,10 +5,8 @@ import { IssueComment } from 'github-webhook-event-types'
 import { Application } from 'probot'
 import { GitHub } from './github'
 
-const sdk_generated_comment_regex = new RegExp(/# Automation for azure-sdk-for-(.*)A .* has been created for you.*/gm)
-const sdk_not_generated_comment_regex_1 = new RegExp(/# Automation for azure-sdk-for-(.*)Nothing to generate for azure-sdk-for-(.*)/gm)
-const sdk_not_generated_comment_regex_2 = new RegExp(/# Automation for azure-sdk-for-(.*)Unable to detect any generation context from this PR./gm)
-const sdk_not_generated_error_comment_regex = new RegExp(/# Automation for azure-sdk-for-(.*)<details><summary>Encountered a Subprocess error:.*/gm)
+const sdk_generated_comment_regex = new RegExp(/# Automation for azure-sdk-for-(.*)/i)
+const sdk_not_generated_error_comment_regex = new RegExp(/Encountered a Subprocess error/i)
 
 export = (app: Application) => {
   app.on('issue_comment.edited', async context => {
@@ -18,31 +16,28 @@ export = (app: Application) => {
     context.log(`Issue comment user ${issue_comment.comment.user.login}`)
     context.log(`Comparison: ${issue_comment.comment.user.login === 'AutorestCI'}`)
 
-    if(issue_comment.comment.user.login === 'sarangan12'){
+    if(issue_comment.comment.user.login === 'AutorestCI'){
     // We know the comment has been created by AutorestCI
       const sdk_generation_comment = sdk_generated_comment_regex.exec(issue_comment.comment.body)
-      const sdk_not_generation_comment_1 = sdk_not_generated_comment_regex_1.exec(issue_comment.comment.body)
-      const sdk_not_generation_comment_2 = sdk_not_generated_comment_regex_2.exec(issue_comment.comment.body)
-      const sdk_not_generation_error_comment = sdk_not_generated_error_comment_regex.exec(issue_comment.comment.body)
+      const sdk_not_generation_error_comment = sdk_not_generated_error_comment_regex.exec(issue_comment.comment.body)    
+      
       const github = new GitHub(context)
       context.log(`Issue Comment Body ${issue_comment.comment.body}`)
       context.log(`SDK Generation Comment ${sdk_generation_comment}`)
+      context.log(`SDK Generation Error Comment ${sdk_not_generation_error_comment}`)
 
-      if(sdk_generation_comment != null || sdk_not_generation_comment_1 != null || sdk_not_generation_comment_2 != null || sdk_not_generation_error_comment != null) {
+      if(sdk_generation_comment != null || sdk_not_generation_error_comment != null) {
       // The message is related to Automation for azure-sdk-for-* message. 
-        let language = ""
+        let name = ""
         let conclusion = "success"
         if(sdk_generation_comment != null) {
         // The SDK Generation is successful and created a PR
-          language = sdk_generation_comment[1]
-        } else if (sdk_not_generation_comment_1 != null) {
-        // The SDK Generation is successful but there is nothing to create
-          language = sdk_not_generation_comment_1[1]
-        } else if (sdk_not_generation_comment_2 != null) {
-          // The SDK Generation is successful but there is nothing to create
-          language = sdk_not_generation_comment_2[1]
+          name = sdk_generation_comment[0]
         } else if (sdk_not_generation_error_comment != null) {
-          language = sdk_not_generation_error_comment[1]
+          name = sdk_not_generation_error_comment[0]
+        }
+
+        if (sdk_not_generation_error_comment != null) {
           conclusion = "failure"
         }
 
@@ -54,7 +49,7 @@ export = (app: Application) => {
         const head_sha = await github.getHeadSha(owner, repository_name, pull_request_number)
 
         const result = await github.postCheck(
-          "Automation for azure-sdk-for-" + language, 
+          name, 
           head_sha,
           "completed", 
           owner, 
