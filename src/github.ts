@@ -28,9 +28,9 @@ export class GitHub {
     return ""
   }
 
-  public async postCheck(name: string, head_sha: string, status: any, owner: string, repo: string, completed_at: string, body: string, conclusion: string):Promise<string> {
+  public async postCheck(name: string, head_sha: string, status: any, owner: string, repo: string, started_at: string, completed_at: string, body: string, conclusion: string):Promise<string> {
     try {
-      const payload = this.getChecksCreateParams(name, head_sha, status, owner, repo, completed_at, body, conclusion)
+      const payload = this.getChecksCreateParams(name, head_sha, status, owner, repo, started_at, completed_at, body, conclusion)
       const result = await this.client.checks.create(payload)
       this.log.info(result)
       return 'Post Check Done'
@@ -48,7 +48,7 @@ export class GitHub {
     }
   }
 
-  private getChecksCreateParams(name: string, head_sha: string, status: any, owner: string, repo: string, completed_at: string, body: string, conclusion: any): Octokit.ChecksCreateParams {
+  private getChecksCreateParams(name: string, head_sha: string, status: any, owner: string, repo: string, started_at: string, completed_at: string, body: string, conclusion: any): Octokit.ChecksCreateParams {
     return {
       name: name,
       head_sha: head_sha,
@@ -56,6 +56,7 @@ export class GitHub {
       head_branch: "master",
       owner: owner,
       repo: repo,
+      started_at: started_at,
       completed_at: completed_at,
       conclusion: conclusion,
       output: {

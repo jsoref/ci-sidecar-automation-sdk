@@ -10,6 +10,7 @@ const sdk_not_generated_error_comment_regex = new RegExp(/Encountered a Subproce
 
 export = (app: Application) => {
   app.on('issue_comment.edited', async context => {
+    const started_at = new Date()
     // A comment has been created. 
     context.log(`Processing status update ${context.payload.installation.id}`)
     const issue_comment = (context.payload as any) as IssueComment
@@ -54,6 +55,7 @@ export = (app: Application) => {
           "completed", 
           owner, 
           repository_name,
+          started_at.toISOString(),
           completed_at,
           issue_comment.comment.body,
           conclusion
