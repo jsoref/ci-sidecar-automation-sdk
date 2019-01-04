@@ -11,35 +11,35 @@ const sdk_not_generated_error_comment_regex = new RegExp(/Encountered a Subproce
 export = (app: Application) => {
   app.on('issue_comment.edited', async context => {
     const started_at = new Date()
-    // A comment has been created. 
+    // A comment has been created.
     context.log(`Processing status update ${context.payload.installation.id}`)
     const issue_comment = (context.payload as any) as IssueComment
     context.log(`Issue comment user ${issue_comment.comment.user.login}`)
     context.log(`Comparison: ${issue_comment.comment.user.login === 'AutorestCI'}`)
 
-    if(issue_comment.comment.user.login === 'AutorestCI'){
+    if (issue_comment.comment.user.login === 'AutorestCI') {
     // We know the comment has been created by AutorestCI
       const sdk_generation_comment = sdk_generated_comment_regex.exec(issue_comment.comment.body)
-      const sdk_not_generation_error_comment = sdk_not_generated_error_comment_regex.exec(issue_comment.comment.body)    
-      
+      const sdk_not_generation_error_comment = sdk_not_generated_error_comment_regex.exec(issue_comment.comment.body)
+
       const github = new GitHub(context)
       context.log(`Issue Comment Body ${issue_comment.comment.body}`)
       context.log(`SDK Generation Comment ${sdk_generation_comment}`)
       context.log(`SDK Generation Error Comment ${sdk_not_generation_error_comment}`)
 
-      if(sdk_generation_comment != null || sdk_not_generation_error_comment != null) {
-      // The message is related to Automation for azure-sdk-for-* message. 
-        let name = ""
-        let conclusion = "success"
-        if(sdk_generation_comment != null) {
+      if (sdk_generation_comment !== null || sdk_not_generation_error_comment !== null) {
+      // The message is related to Automation for azure-sdk-for-* message.
+        let name = ''
+        let conclusion = 'success'
+        if (sdk_generation_comment !== null) {
         // The SDK Generation is successful and created a PR
           name = sdk_generation_comment[0]
-        } else if (sdk_not_generation_error_comment != null) {
+        } else if (sdk_not_generation_error_comment !== null) {
           name = sdk_not_generation_error_comment[0]
         }
 
-        if (sdk_not_generation_error_comment != null) {
-          conclusion = "failure"
+        if (sdk_not_generation_error_comment !== null) {
+          conclusion = 'failure'
         }
 
         // We need to get the head_sha value
@@ -50,10 +50,10 @@ export = (app: Application) => {
         const head_sha = await github.getHeadSha(owner, repository_name, pull_request_number)
 
         const result = await github.postCheck(
-          name, 
+          name,
           head_sha,
-          "completed", 
-          owner, 
+          'completed',
+          owner,
           repository_name,
           started_at.toISOString(),
           completed_at,
